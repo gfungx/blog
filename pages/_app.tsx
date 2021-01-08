@@ -1,4 +1,7 @@
-import 'preact/debug';
+if (process.env.NODE_ENV === 'development') {
+  require('preact/debug');
+}
+
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 
