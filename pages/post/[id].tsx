@@ -3,11 +3,14 @@ import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { format } from 'timeago.js';
 
-import prisma from 'lib/prisma';
-import { Post as PostType } from 'prisma/generated/index.d';
+import prisma, { Post as PostType } from 'lib/prisma';
 
 type PostProps = {
-  post: PostType;
+  post: PostType & {
+    author: {
+      name: string;
+    };
+  };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -33,9 +36,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const post = await prisma().post.findUnique({
+  let post = await prisma().post.findUnique({
     where: {
       id: Number(params!.id)
+    },
+    include: {
+      author: {
+        select: { name: true }
+      }
     }
   });
 
@@ -46,7 +54,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 const Post: FunctionalComponent<PostProps> = ({
-  post: { title, content, photo, createdAt }
+  post: {
+    title,
+    photo,
+    content,
+    createdAt,
+    author: { name }
+  }
 }) => {
   const router = useRouter();
 
@@ -76,7 +90,7 @@ const Post: FunctionalComponent<PostProps> = ({
             {title}
           </h1>
           <p className="uppercase font-mono pt-1 text-gray-700 text-sm">
-            Author &bull; {format(new Date(createdAt))}
+            {name} &bull; {format(new Date(createdAt))}
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { FunctionalComponent } from 'preact';
 import Link from 'next/link';
+import { format } from 'timeago.js';
 
 type CardProps = {
   id: number;
@@ -21,7 +22,7 @@ const Card: FunctionalComponent<CardProps> = ({
     <div className="p-4">
       <h1 className="font-bold text-2xl">{title}</h1>
       <p className="uppercase font-mono text-sm text-gray-500">
-        {name} &bull; {createdAt}
+        {name} &bull; {format(new Date(createdAt))}
       </p>
       <div className="flex justify-end">
         <Link href={`/post/${id}`}>

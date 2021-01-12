@@ -1,7 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import Masonry from 'react-masonry-css';
 
-import { Post } from 'prisma/generated/index.d';
+import { Post } from 'node_modules/.prisma/client/index.d';
 import Card from 'components/Posts/Card';
 
 type DashboardProps = {
