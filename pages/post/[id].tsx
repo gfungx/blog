@@ -11,7 +11,9 @@ type PostProps = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await prisma().post.findMany({
+  const posts: {
+    id: number;
+  }[] = await prisma().post.findMany({
     where: {
       published: true
     },
@@ -20,7 +22,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
     }
   });
 
-  const paths = posts.map(post => ({ params: { id: String(post.id) } }));
+  const paths: { params: { id: string } }[] = posts.map(post => ({
+    params: { id: String(post.id) }
+  }));
 
   return {
     paths,
