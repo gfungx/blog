@@ -1,10 +1,24 @@
-## What is this?
+## What's this?
 
-This is a simple blog built with [Next.js](https://nextjs.org/), [Preact](https://preactjs.com/) and [Chakra UI](https://chakra-ui.com/).
+This is a simple blog built as a playground to learn some new technologies.
+
+## What'd I use?
+
+- [Next.js](https://nextjs.org/)
+- [Preact](https://preactjs.com/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ## Getting Started
 
-First, run the development server:
+Firstly, add a file called `.env` into the root of the directory and fill it out as follows:
+
+```
+DATABASE_URL={YOUR_POSTGRES_DATABASE_URL}
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
