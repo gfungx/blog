@@ -4,6 +4,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { format } from 'timeago.js';
 
 import prisma, { Post as PostType } from 'lib/prisma';
+import Error from 'components/Error';
 
 type PostProps = {
   post: PostType & {
@@ -36,7 +37,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  let post = await prisma().post.findUnique({
+  const post = await prisma().post.findUnique({
     where: {
       id: Number(params!.id)
     },
@@ -53,16 +54,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-const Post: FunctionalComponent<PostProps> = ({
-  post: {
-    title,
-    photo,
-    content,
-    createdAt,
-    author: { name }
-  }
-}) => {
+const Post: FunctionalComponent<PostProps> = ({ post }) => {
   const router = useRouter();
+
+  if (!post) {
+    return <Error />;
+  }
 
   return (
     <>
@@ -87,22 +84,22 @@ const Post: FunctionalComponent<PostProps> = ({
         </p>
         <div className="px-24 py-24">
           <h1 className="font-extrabold text-4xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
-            {title}
+            {post.title}
           </h1>
           <p className="uppercase font-mono pt-1 text-gray-700 text-sm">
-            {name} &bull; {format(new Date(createdAt))}
+            {post.author.name} &bull; {format(new Date(post.createdAt))}
           </p>
         </div>
       </div>
       <div className="mt-16 container lg:max-w-screen-md sm:max-w-screen-sm mx-auto">
-        <a href={photo} target="_blank">
+        <a href={post.photo} target="_blank">
           <img
-            src={photo}
+            src={post.photo}
             alt=""
             className="rounded-xl w-1/2 float-left shadow-xl mr-6 mb-2 transform transition duration-200 hover:scale-105 hover:shadow-2xl"
           />
         </a>
-        <p>{content}</p>
+        <p>{post.content}</p>
         <button
           className="fixed bottom-0 right-0 mb-12"
           onClick={() => window.scroll({ top: 0, behavior: 'smooth' })}
