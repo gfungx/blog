@@ -4,6 +4,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { format } from 'timeago.js';
 
 import prisma, { Post as PostType } from 'lib/prisma';
+import Page from 'components/Page';
 import Error from 'components/Error';
 
 type PostProps = {
@@ -62,7 +63,19 @@ const Post: FunctionalComponent<PostProps> = ({ post }) => {
   }
 
   return (
-    <>
+    <Page
+      title={post.title}
+      description={post.content!.substr(0, 125) + '...'}
+      canonical={`https://blog.gfung.vercel.app/post/${post.id}`}
+      openGraph={{
+        article: {
+          publishedTime: String(post.createdAt),
+          modifiedTime: String(post.updatedAt),
+          authors: [`https://blog.gfung.vercel.app/user/${post.authorId}`]
+        },
+        images: [{ url: post.photo }]
+      }}
+    >
       <div className="bg-gray-100">
         <p
           className="absolute inline-flex items-center cursor-pointer text-xs text-gray-600 my-4 mx-2"
@@ -121,7 +134,7 @@ const Post: FunctionalComponent<PostProps> = ({ post }) => {
           </p>
         </button>
       </div>
-    </>
+    </Page>
   );
 };
 
