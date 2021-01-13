@@ -3,12 +3,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 import type { AppProps } from 'next/app';
-import { Container } from 'next/app';
 import 'tailwindcss/tailwind.css';
 import { DefaultSeo } from 'next-seo';
 
 const App = ({ Component, pageProps }: AppProps) => (
-  <Container>
+  <>
     <DefaultSeo
       title="Blog"
       titleTemplate="%s | Blog"
@@ -22,7 +21,7 @@ const App = ({ Component, pageProps }: AppProps) => (
       }}
     />
     <Component {...pageProps} />
-  </Container>
+  </>
 );
 
 export default App;
